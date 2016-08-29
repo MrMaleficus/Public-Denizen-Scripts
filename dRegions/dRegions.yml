@@ -1325,7 +1325,7 @@ dRegions_Events_Entity_Change_Block:
     # Maybe we want to check block changes here for explosions?
     # It's currently disabled because even if the explosion is cancelled, the block
     # change event(s) still fire (yes, one explosion can have multiple block changes)
-    - if <c.old_material.bukkit_enum> == soil || li@falling_block|creeper|primed_tnt contains <c.entity.entity_type> {
+    - if <c.old_material.bukkit_enum> == soil || li@falling_block|creeper|primed_tnt|unknown contains <c.entity.entity_type||unknown> {
       - queue clear
       }
     # This is generic rateLimiter and does not run a full allow/deny flag process. It is required due to the high frequency of snowmen.
@@ -2141,8 +2141,7 @@ dRegions_HasPerm_Command:
 #
 dRegions_CloneWord:
   type: world
-  debug: true
-
+  debug: false
   events:
     on instance created:
     - define clone <c.blueprint_world>
@@ -2173,7 +2172,7 @@ dRegions_CloneWord:
         - yaml unload 'id:%writeID%'
         }
       - yaml 'load:dRegions/worlds/%world%/%this%.yml' 'id:%writeID%'
-    - foreach '<yaml[dRegions_%world%_regions].list_keys[regions]>':
+    - foreach '<yaml[dRegions_%world%_regions].list_keys[regions].exclude[__global__]>':
       - note 'cu@<yaml[dRegions_%world%_regions].read[regions.%value%.min]>|<yaml[dRegions_%world%_regions].read[regions.%value%.max]>' 'as:dregions_%world%_%value%'
 
 
